@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "scaffold-astro-site",
+  "compatibility_date": "2026-09-08",
+  // No Worker script: this is a static site, served entirely from the
+  // Astro build's output. Static-only Workers still need a
+  // compatibility_date, but nothing here ever runs server-side code.
+  "assets": {
+    "directory": "./dist"
+  }
+}

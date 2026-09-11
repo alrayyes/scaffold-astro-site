@@ -1,0 +1,12 @@
+No licence has been chosen for this project yet.
+
+This is a template repository (`scaffold-astro-site`), not a finished
+project. A project created from it with `gh repo create --template` inherits
+this file as-is, and picking a real licence is one of the first things to do
+before that project's code goes anywhere another person can see it — before
+that, nothing in it may be used, copied, modified or redistributed under any
+licence at all.
+
+https://choosealicense.com is a reasonable place to start. Once a licence is
+chosen, replace this file with its full text and update the "Licence"
+section of README.md to name it.

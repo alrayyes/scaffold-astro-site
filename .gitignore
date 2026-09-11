@@ -1,0 +1,31 @@
+# What this scaffold builds, not what an editor or OS drops beside it —
+# those live in ~/.config/git/gitignore_global, not here.
+
+node_modules/
+.bun-cache/
+
+# Astro's build output and its own generated types.
+dist/
+.astro/
+
+# wrangler's local dev bundling and its Cloudflare API cache.
+.wrangler/
+
+# Playwright's own run output.
+test-results/
+playwright-report/
+
+# Never committed, per-environment.
+.env
+.env.production
+
+# Written by the release job, not by hand.
+CHANGELOG.md
+
+# Vale's style packages, downloaded by `vale sync`.
+/styles/Google/
+/styles/proselint/
+
+# bun test --coverage's own report, uploaded to Codecov in CI rather than
+# committed.
+coverage/

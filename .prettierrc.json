@@ -1,0 +1,8 @@
+{
+  "proseWrap": "preserve",
+  "plugins": ["prettier-plugin-astro"],
+  "overrides": [
+    { "files": "*.md", "options": { "tabWidth": 2 } },
+    { "files": "*.astro", "options": { "parser": "astro" } }
+  ]
+}
