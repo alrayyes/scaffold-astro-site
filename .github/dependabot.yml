@@ -1,0 +1,69 @@
+# Runs even though nothing deploys from this repo: a dependency bump that
+# needs a config change on our side — a new default, a breaking flag, a
+# moved setting — surfaces here, on the template, instead of on day one of
+# the first real project cloned from it. Costs nothing to leave on either:
+# public repos get unlimited GitHub Actions minutes, so there's no metering
+# concern the way a private repo would have.
+#
+# Dependabot raises the pull request; CI decides whether it lands. Everything
+# here is pinned to an exact version, which is the whole reason this works —
+# a floating range drifts silently and there's nothing to raise a pull
+# request about.
+version: 2
+
+updates:
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    # A newly published version can be malicious or unstable before anyone's
+    # had a chance to notice — wait a week before proposing it.
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    commit-message:
+      # Conventional Commits, because commitlint checks these messages and
+      # the version number is computed from them. This scaffold ships as an
+      # Astro static site, so a bump to a production dependency is a change
+      # to what ships whether or not it's security-relevant, and fix: cuts
+      # the patch release the same way any other fix does. A dev-only
+      # dependency (the linters, test tooling) never ships, so it stays
+      # chore: and releases nothing.
+      prefix: fix
+      prefix-development: chore
+      include: scope
+    groups:
+      bun-dependencies:
+        patterns: ["*"]
+        update-types: [minor, patch]
+      # Grouping (even a group of one) keeps a major bump on Dependabot's
+      # lowercase group-title template instead of falling back to its
+      # sentence-case single-update one, which fails commitlint's
+      # subject-case rule on the raw commit — see rules/releases.md.
+      bun-dependencies-major:
+        patterns: ["*"]
+        update-types: [major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    cooldown:
+      default-days: 7
+    # Changes the pipeline, not the artifact — releasing for this is noise.
+    commit-message:
+      prefix: ci
+      include: scope
+    groups:
+      actions:
+        patterns: ["*"]
+        update-types: [minor, patch]
+      actions-major:
+        patterns: ["*"]
+        update-types: [major]
