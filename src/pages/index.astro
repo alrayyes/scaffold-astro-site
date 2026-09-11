@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="scaffold-astro-site"
+  description="A GitHub template for an Astro site, deployed to Cloudflare."
+>
+  <main>
+    <h1>scaffold-astro-site</h1>
+    <p>
+      A GitHub template for an Astro site, deployed to Cloudflare. Replace this
+      page with your first real one and delete this paragraph.
+    </p>
+
+    <form id="greet-form">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" autocomplete="name" />
+      <button type="submit">Say hello</button>
+    </form>
+    <p id="greeting" role="status"></p>
+  </main>
+</Layout>
+
+<script>
+  import { getGreeting } from "../lib/greeting";
+
+  const form = document.querySelector<HTMLFormElement>("#greet-form");
+  const input = document.querySelector<HTMLInputElement>("#name");
+  const output = document.querySelector<HTMLParagraphElement>("#greeting");
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (output) {
+      output.textContent = getGreeting(input?.value);
+    }
+  });
+</script>
