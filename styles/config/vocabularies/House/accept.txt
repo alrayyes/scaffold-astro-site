@@ -1,0 +1,52 @@
+# Product and tool names, spelled the way their owners spell them. Vale.Terms
+# holds the prose to exactly these, so casing here is the casing everywhere.
+Cloudflare
+Dependabot
+GitHub
+Biome
+bundler
+JavaScript
+bun
+bunx
+lefthook
+markdownlint
+commitlint
+Playwright
+Renovate
+allowlist
+changelog
+ruleset
+rulesets
+toolchain
+toolchains
+autodiscover
+automerge
+dev
+scaffolded
+webServer
+wrangler
+CI
+YAML
+JSON
+LTeX
+README's
+whatever's
+whoever's
+prerender
+skippable
+hardcoded
+CLI's
+Forgejo
+Codecov
+repos?
+repo's
+lockfile
+lockfiles
+erroring
+
+# Lowercase only: "astro" is a substring of this repo's own name,
+# scaffold-astro-site, and needs accepting for every README/CLAUDE.md H1.
+# The framework name itself is written `Astro`, in backticks, everywhere
+# in prose — a code span, so Vale never checks its spelling or casing —
+# rather than adding the capitalised form here and fighting the H1 for it.
+astro

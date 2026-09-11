@@ -1,0 +1,78 @@
+# The two tiers markdownlint doesn't cover. Layout is Prettier and structure
+# is markdownlint, both in ci.yml. Mechanics and style are separate jobs on
+# purpose — a grammar mistake and a style opinion are answered differently.
+#
+# paths:-filtered, unlike ci.yml and gitleaks.yml — never add either job
+# name here to required_status_checks: a PR that never touches a matching
+# path never reports on it, and "never ran" isn't a pass (rules/ci.md).
+name: prose
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.md"
+      - .vale.ini
+      - .ltex.json
+      - styles/**
+      - .github/workflows/prose.yml
+  pull_request:
+    paths:
+      - "**/*.md"
+      - .vale.ini
+      - .ltex.json
+      - styles/**
+      - .github/workflows/prose.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prose-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # renovate: datasource=go depName=github.com/errata-ai/vale/v3
+  VALE_VERSION: v3.19.0
+
+jobs:
+  mechanics:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check the prose this repository owns
+        # The same script the pre-push hook runs, so the two cannot disagree
+        # about the version, the file list or what counts as a failure.
+        run: ./scripts/lint-mechanics.sh
+
+  style:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: "1.27"
+      - name: Install Vale
+        env:
+          GOTOOLCHAIN: auto
+        run: go install github.com/errata-ai/vale/v3/cmd/vale@${{ env.VALE_VERSION }}
+      - name: Vale
+        env:
+          VALE_REPORT: vale.txt
+        run: ./scripts/lint-prose.sh
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo '### Vale'
+            echo
+            if [ -s vale.txt ]; then
+              echo '```'
+              cat vale.txt
+              echo '```'
+            else
+              echo 'Nothing to report.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

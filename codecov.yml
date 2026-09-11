@@ -1,0 +1,15 @@
+# Visibility, not a gate (rules/testing.md) — coverage is reported and
+# tracked over time, but a drop never turns CI red or blocks a merge.
+# Without this, Codecov's own default policy fails its patch/project status
+# checks on any decrease, which reads as a build failure even though
+# neither check is in branch protection's required list.
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+comment: false
