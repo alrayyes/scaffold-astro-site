@@ -1,0 +1,36 @@
+# Nobody picks a version. release-please reads the Conventional Commits that
+# land on main and keeps a release pull request open carrying the next
+# version and the changelog entry; merging that pull request tags the
+# release and writes the notes.
+#
+# No deploy step here: Cloudflare's own GitHub integration (once a real
+# site's repo is connected to it on the Cloudflare dashboard) watches the
+# repo directly and builds/deploys itself (preview per pull request,
+# production on main) — this job is versioning and release notes only. See
+# README.md's Deployment section.
+name: release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # tags the release and writes it
+      pull-requests: write # keeps the release pull request up to date
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
