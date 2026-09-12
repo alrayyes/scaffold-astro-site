@@ -24,6 +24,13 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 10
+    # TypeScript 7 is the Go-rewritten compiler with a different internal
+    # API — @astrojs/language-server's AstroCheck crashes on it (#2). Ignore
+    # until it catches up; drop this once a bump to it builds clean against
+    # TS 7.
+    ignore:
+      - dependency-name: "typescript"
+        versions: [">=7.0.0"]
     commit-message:
       # Conventional Commits, because commitlint checks these messages and
       # the version number is computed from them. This scaffold ships as an
