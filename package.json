@@ -25,6 +25,7 @@
     "test:unit": "bun test src --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=coverage/junit-unit.xml"
   },
   "overrides": {
+    "playwright-core": "1.63.0",
     "sharp": "0.35.4",
     "smol-toml": "1.7.1"
   },
