@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@codecov/astro-plugin": "2.0.1",
-    "astro": "7.3.3"
+    "astro": "7.3.5"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
@@ -43,11 +43,11 @@
     "@types/bun": "1.4.2",
     "lefthook": "2.1.14",
     "markdownlint-cli2": "0.23.3",
-    "prettier": "3.9.8",
-    "prettier-plugin-astro": "1.0.1",
+    "prettier": "3.9.9",
+    "prettier-plugin-astro": "1.1.0",
     "sort-package-json": "4.0.0",
     "typescript": "6.0.3",
-    "wrangler": "4.135.0"
+    "wrangler": "4.142.0"
   },
   "packageManager": "bun@1.3.14",
   "trustedDependencies": [
