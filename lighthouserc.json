@@ -1,0 +1,14 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "settings": {
+        "chromeFlags": "--no-sandbox --headless=new"
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./lighthouse-report"
+    }
+  }
+}

@@ -50,3 +50,5 @@ erroring
 # in prose — a code span, so Vale never checks its spelling or casing —
 # rather than adding the capitalised form here and fighting the H1 for it.
 astro
+JUnit
+Cobertura

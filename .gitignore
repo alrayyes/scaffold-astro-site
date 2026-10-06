@@ -29,3 +29,7 @@ CHANGELOG.md
 # bun test --coverage's own report, uploaded to Codecov in CI rather than
 # committed.
 coverage/
+lighthouse-report/
+
+# Lighthouse CI's own scratch directory and its filesystem output.
+.lighthouseci/
