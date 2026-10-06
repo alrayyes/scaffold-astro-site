@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.1...scaffold-astro-site-v1.0.2) (2026-10-06)
+
+
+### Bug Fixes
+
+* **deps:** override vulnerable transitive packages ([#17](https://github.com/alrayyes/scaffold-astro-site/issues/17)) ([55a6814](https://github.com/alrayyes/scaffold-astro-site/commit/55a68143ebc0f733e7de4061cf03837dccf05cd8)), closes [#16](https://github.com/alrayyes/scaffold-astro-site/issues/16)
+
 ## [1.0.1](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.0...scaffold-astro-site-v1.0.1) (2026-10-06)
 
 
