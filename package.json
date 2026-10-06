@@ -25,9 +25,15 @@
     "test:unit": "bun test src scripts --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=coverage/junit-unit.xml"
   },
   "overrides": {
+    "devalue": "5.9.4",
+    "fast-uri": "3.1.8",
+    "http-cache-semantics": "4.3.0",
+    "katex": "0.18.11",
     "playwright-core": "1.63.0",
     "sharp": "0.35.4",
-    "smol-toml": "1.7.1"
+    "smol-toml": "1.9.0",
+    "source-map-js": "1.2.2",
+    "undici": "7.30.0"
   },
   "dependencies": {
     "@codecov/astro-plugin": "2.0.1",
