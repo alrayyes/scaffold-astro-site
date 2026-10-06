@@ -67,6 +67,26 @@ scripts) stay available for a manual or CI-driven deploy instead, if a
 project stamped from this template ever wants that instead of the GitHub
 integration — see [Cloudflare's Workers docs](https://developers.cloudflare.com/workers/wrangler/).
 
+## Reports
+
+CI publishes this project's test, coverage, and Lighthouse reports to GitHub
+Pages, from the same workflow that gates the code. For a repo called `my-site`
+under `alrayyes` they're at `https://apis.ryankes.eu/my-site/reports/`:
+
+- `tests/`: the unit (`unit.xml`) and end-to-end (`e2e.xml`) results as JUnit
+  XML.
+- `coverage/`: an HTML view, `coverage.xml` (Cobertura) and `lcov.info`.
+- `lighthouse/`: the HTML and JSON report for each audited page.
+
+Every pull request assembles them, so a broken step fails before the merge,
+but only a push to the default branch deploys. After the deploy, a step
+fetches `coverage.xml` from the live URL.
+
+Two things to know in a generated repo. Set Settings, Pages, Source to GitHub
+Actions once, or the deploy job fails. And if the repo is a user site
+(`<owner>.github.io`), the reports are at `/reports/` with no repo-name
+prefix: the workflow reads the URL Pages reports, so it needs no change.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the toolchain, the hooks, and how

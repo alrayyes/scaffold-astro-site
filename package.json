@@ -22,7 +22,7 @@
     "sort-package-json:check": "sort-package-json --check",
     "test": "bun run test:unit && bun run test:e2e",
     "test:e2e": "playwright test",
-    "test:unit": "bun test src --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=coverage/junit-unit.xml"
+    "test:unit": "bun test src scripts --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=coverage/junit-unit.xml"
   },
   "overrides": {
     "playwright-core": "1.63.0",
