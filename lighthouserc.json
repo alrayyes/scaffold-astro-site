@@ -9,6 +9,15 @@
     "upload": {
       "target": "filesystem",
       "outputDir": "./lighthouse-report"
+    },
+    "assert": {
+      "assertions": {
+        "cache-insight": "off",
+        "document-latency-insight": "off",
+        "render-blocking-insight": "warn",
+        "network-dependency-tree-insight": "warn",
+        "unused-javascript": "warn"
+      }
     }
   }
 }

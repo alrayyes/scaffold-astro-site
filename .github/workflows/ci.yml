@@ -153,7 +153,9 @@ jobs:
 
   # Lighthouse CI against the built site, straight off the filesystem: no
   # server to start, and the HTML and JSON per audited page land in
-  # lighthouse-report/. No score assertions; the point is a published report.
+  # lighthouse-report/. Insight assertions are warn-level (cache and compression are
+  # off: this audit has no headers, so check those against the deployed site)
+  # and the point is the published report.
   lighthouse:
     runs-on: ubuntu-24.04
     timeout-minutes: 10

@@ -51,6 +51,11 @@ script, no adapter, just `dist/` served directly by Cloudflare Workers —
 the same shape as this account's other `Astro`/Cloudflare sites
 (`movie-planner-web`, `washy-washy-web`).
 
+`public/_headers` is copied into `dist/` and read by Cloudflare. It marks
+everything under `/_astro/` (fingerprinted by `Astro`) as `immutable` for a
+year. HTML keeps Cloudflare's default of checking with the server on every
+request.
+
 The deploy itself isn't a step in this repo's own CI. Cloudflare's own
 GitHub integration is what actually builds and deploys a project stamped
 from this template — connected once, on the Cloudflare dashboard, against
