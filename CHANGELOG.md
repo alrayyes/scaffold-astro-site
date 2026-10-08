@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.3](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.2...scaffold-astro-site-v1.0.3) (2026-10-08)
+
+
+### Bug Fixes
+
+* **deps:** bump the sharp override past GHSA-wq5f-xc86-pv6w ([82f8304](https://github.com/alrayyes/scaffold-astro-site/commit/82f830448551a03d437a9b01ce0209160e33f1f7))
+* **deps:** bump the sharp override past its advisory ([b7c7a54](https://github.com/alrayyes/scaffold-astro-site/commit/b7c7a5493476e955374ab42df7c7d42368cb7140))
+
+
+### Performance Improvements
+
+* cache fingerprinted assets and assert Lighthouse insights ([916a770](https://github.com/alrayyes/scaffold-astro-site/commit/916a7705170ba09ae8e2af2be2a6aca471b403aa))
+* cache fingerprinted assets, assert insights ([a071caf](https://github.com/alrayyes/scaffold-astro-site/commit/a071caf4fd58e70a842e65c0b2af73e2b4eb30ae))
+
 ## [1.0.2](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.1...scaffold-astro-site-v1.0.2) (2026-10-06)
 
 
