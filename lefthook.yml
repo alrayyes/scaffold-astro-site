@@ -23,7 +23,9 @@ pre-commit:
 
     - name: markdownlint
       glob: "*.md"
-      run: bunx markdownlint-cli2 {staged_files}
+      # --no-globs: the `globs` in .markdownlint-cli2.yaml are added to any
+      # file list, so without it this lints the whole tree, not the commit.
+      run: bunx markdownlint-cli2 --no-globs {staged_files}
 
     - name: sort-package-json
       glob: "package.json"
