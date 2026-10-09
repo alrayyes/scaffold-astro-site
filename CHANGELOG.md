@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.3...scaffold-astro-site-v1.0.4) (2026-10-09)
+
+
+### Bug Fixes
+
+* **hooks:** lint only staged files with markdownlint ([#26](https://github.com/alrayyes/scaffold-astro-site/issues/26)) ([b28aa02](https://github.com/alrayyes/scaffold-astro-site/commit/b28aa0257f598d90d6562c14ff3fb7628c8fadb2))
+
 ## [1.0.3](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.2...scaffold-astro-site-v1.0.3) (2026-10-08)
 
 
