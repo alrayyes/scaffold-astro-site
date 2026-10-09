@@ -55,6 +55,9 @@ the same shape as this account's other `Astro`/Cloudflare sites
 everything under `/_astro/` (fingerprinted by `Astro`) as `immutable` for a
 year. HTML keeps Cloudflare's default of checking with the server on every
 request.
+`e2e/headers.spec.ts` checks both against the wrangler server, so a changed
+`_headers` fails CI. It skips the `/_astro/` check until a page references an
+asset there.
 
 The deploy itself isn't a step in this repo's own CI. Cloudflare's own
 GitHub integration is what actually builds and deploys a project stamped
