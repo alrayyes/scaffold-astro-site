@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.4...scaffold-astro-site-v1.1.0) (2026-10-10)
+
+
+### Features
+
+* send the baseline security headers from public/_headers ([438ec6f](https://github.com/alrayyes/scaffold-astro-site/commit/438ec6fbcda069e1acf923cff6924bcf0fef36b9))
+* send the baseline security headers from public/_headers ([c917867](https://github.com/alrayyes/scaffold-astro-site/commit/c917867d95275cafdf9510b5c5b154f369db2b45)), closes [#28](https://github.com/alrayyes/scaffold-astro-site/issues/28)
+
 ## [1.0.4](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.3...scaffold-astro-site-v1.0.4) (2026-10-09)
 
 
