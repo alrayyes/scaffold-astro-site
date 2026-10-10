@@ -6,6 +6,9 @@
   // Astro build's output. Static-only Workers still need a
   // compatibility_date, but nothing here ever runs server-side code.
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    // Serve the nearest 404.html, with a 404 status, for a path that matches
+    // no file. Without this Workers answers with an empty 404 body.
+    "not_found_handling": "404-page"
   }
 }

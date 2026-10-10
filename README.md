@@ -65,6 +65,12 @@ third-party origin a site needs to the matching CSP directive. The HSTS
 `preload` directive is left out on purpose: it commits the domain to the
 browsers' built-in HSTS list, so add it per site once that's wanted.
 
+`src/pages/404.astro` builds to `404.html`, and `not_found_handling` in
+`wrangler.jsonc` makes Cloudflare serve it, with a 404 status, for any path
+that matches no file. `e2e/not-found.spec.ts` checks the status, the heading
+and the way back home. A static site has no server-side 500, so there's no
+`500.astro` here; add one if the site starts rendering on demand.
+
 `e2e/headers.spec.ts` checks the cache and security headers against the
 wrangler server, so a changed `_headers` fails CI.
 
