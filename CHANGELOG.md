@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.1.0...scaffold-astro-site-v1.2.0) (2026-10-10)
+
+
+### Features
+
+* ship a 404 page ([55892f8](https://github.com/alrayyes/scaffold-astro-site/commit/55892f81ab036d0baffd2c8d716eaef14538de18))
+* ship a 404 page ([fa8e513](https://github.com/alrayyes/scaffold-astro-site/commit/fa8e5135eac99749bfeba3ba4dc785f9262186c6)), closes [#31](https://github.com/alrayyes/scaffold-astro-site/issues/31)
+
 ## [1.1.0](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.0.4...scaffold-astro-site-v1.1.0) (2026-10-10)
 
 
