@@ -55,9 +55,18 @@ the same shape as this account's other `Astro`/Cloudflare sites
 everything under `/_astro/` (fingerprinted by `Astro`) as `immutable` for a
 year. HTML keeps Cloudflare's default of checking with the server on every
 request.
-`e2e/headers.spec.ts` checks both against the wrangler server, so a changed
-`_headers` fails CI. It skips the `/_astro/` check until a page references an
-asset there.
+
+The same file sends the baseline security headers on every response: a
+Content-Security-Policy (scripts from `'self'` only, no framing), HSTS, a
+same-origin Cross-Origin-Opener-Policy and `X-Frame-Options: DENY`. Because
+`script-src` has no `'unsafe-inline'`, `astro.config.mjs` sets
+`vite.build.assetsInlineLimit` to 0 so scripts always ship as files. Add any
+third-party origin a site needs to the matching CSP directive. The HSTS
+`preload` directive is left out on purpose: it commits the domain to the
+browsers' built-in HSTS list, so add it per site once that's wanted.
+
+`e2e/headers.spec.ts` checks the cache and security headers against the
+wrangler server, so a changed `_headers` fails CI.
 
 The deploy itself isn't a step in this repo's own CI. Cloudflare's own
 GitHub integration is what actually builds and deploys a project stamped

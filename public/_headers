@@ -2,5 +2,14 @@
 # Astro fingerprints everything under /_astro/, so it can be cached for a year
 # and never revalidated. Pages keep Cloudflare's default
 # (public, max-age=0, must-revalidate), which is right for HTML.
+#
+# The security headers apply to every response. script-src is 'self' only, so
+# astro.config.mjs keeps every script a file under /_astro/ instead of inlining
+# it. Styles stay inline, hence 'unsafe-inline' on style-src alone.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+  X-Frame-Options: DENY
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
