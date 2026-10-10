@@ -7,6 +7,9 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   output: "static",
+  // Never inline a script into the HTML: the CSP in public/_headers allows
+  // script-src 'self' only, and Vite inlines anything under 4 kB by default.
+  vite: { build: { assetsInlineLimit: 0 } },
   integrations: [
     // Codecov Bundle Analysis: a build-time plugin, not a CI-time upload
     // step. Reuses the same CODECOV_TOKEN coverage and test results
