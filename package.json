@@ -42,18 +42,18 @@
   "devDependencies": {
     "@astrojs/check": "0.9.10",
     "@axe-core/playwright": "4.13.0",
-    "@biomejs/biome": "2.5.14",
+    "@biomejs/biome": "2.5.15",
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
     "@playwright/test": "1.63.0",
     "@types/bun": "1.4.2",
-    "lefthook": "2.1.14",
+    "lefthook": "2.1.17",
     "markdownlint-cli2": "0.23.3",
     "prettier": "3.9.9",
     "prettier-plugin-astro": "1.1.0",
     "sort-package-json": "4.0.0",
     "typescript": "6.0.3",
-    "wrangler": "4.142.0"
+    "wrangler": "4.147.0"
   },
   "packageManager": "bun@1.3.14",
   "trustedDependencies": [
