@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.0...scaffold-astro-site-v1.2.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* **ci:** run release-auto-merge when the autorelease label is added ([#37](https://github.com/alrayyes/scaffold-astro-site/issues/37)) ([47953d2](https://github.com/alrayyes/scaffold-astro-site/commit/47953d2a1893ae3785b852759432fea9418df03c)), closes [#36](https://github.com/alrayyes/scaffold-astro-site/issues/36)
+
 ## [1.2.0](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.1.0...scaffold-astro-site-v1.2.0) (2026-10-10)
 
 
