@@ -30,6 +30,14 @@ because Cloudflare's own build also runs `bun install` (to get `wrangler`
 and the rest of `devDependencies` needed to build), and a hook-installation
 failure there has no business blocking a deploy.
 
+## Dependency advisories
+
+The `audit` job fails a pull request only for advisories that pull request
+adds to `bun.lock`. What is already on `main` is tracked by
+`advisory-scan.yml`, which keeps one open issue titled `Dependency advisories`
+and closes it when the audit is clean. Nothing is ignored, so a finding with no
+patched release stays in that issue until one ships.
+
 ## Everyday commands
 
 Every one of these is what a hook or CI runs — see `lefthook.yml` and
