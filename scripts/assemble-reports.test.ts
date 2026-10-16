@@ -177,7 +177,11 @@ describe("pageSlug", () => {
     ["http://localhost/blog/post.html", "blog-post"],
     ["http://localhost/about.htm", "about"],
     ["http://localhost/blog/", "blog"],
-    ["http://localhost/caf%C3%A9.html", "caf"],
+    ["http://localhost/caf%C3%A9.html", "caf_e9"],
+    ["http://localhost/%C3%A9", "_e9"],
+    ["http://localhost/%E6%97%A5%E6%9C%AC", "_65e5_672c"],
+    ["http://localhost/%ZZ", "ZZ"],
+    ["http://localhost/%E0%A4%A.html", "E0-A4-A"],
     ["http://localhost/a%20b.html", "a-b"],
   ])("%s becomes %s", (url, slug) => {
     expect(pageSlug(url)).toBe(slug);
@@ -263,6 +267,20 @@ describe("stabiliseLighthouse", () => {
     for (const n of names.filter((n) => n.endsWith(".report.html"))) {
       expect(index).toContain(`href="${n}"`);
     }
+  });
+
+  test("keeps pages that differ only by a non-ASCII character apart, and apart from the home page", async () => {
+    await seed();
+    await seedRuns([
+      run("http://localhost/", stamps[0], true, "localhost-home"),
+      run("http://localhost/%C3%A9", stamps[1], true, "localhost-e1"),
+      run("http://localhost/%C3%A8", stamps[2], true, "localhost-e2"),
+    ]);
+    await assembleReports({ root, out });
+    const names = (await readdir(join(out, "lighthouse"))).filter((n) =>
+      n.endsWith(".report.html"),
+    );
+    expect(names.sort()).toEqual(["_e8.report.html", "_e9.report.html", "index.report.html"]);
   });
 
   test("still refuses two URLs that differ only by encoding", async () => {

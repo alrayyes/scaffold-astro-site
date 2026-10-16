@@ -67,10 +67,19 @@ interface ManifestEntry {
 
 // `/` becomes `index`, `/blog/post.html` becomes `blog-post`. The result is
 // plain ASCII: percent-encoding would be decoded by the browser following the
-// index link, and miss the file.
+// index link, and miss the file. A non-ASCII character becomes `_` and its
+// code point in hex (`/café` is `caf_e9`) rather than being dropped, so pages
+// that differ only there keep different names and none falls back to `index`.
+// A malformed %-sequence is kept as typed instead of failing the assembly.
 export function pageSlug(url: string): string {
-  const slug = decodeURIComponent(new URL(url).pathname)
+  const { pathname } = new URL(url);
+  let path = pathname;
+  try {
+    path = decodeURIComponent(pathname);
+  } catch {}
+  const slug = path
     .replace(/\.html?$/, "")
+    .replace(/\P{ASCII}/gu, (char) => `_${char.codePointAt(0)?.toString(16)}`)
     .replace(/[^A-Za-z0-9._]+/g, "-")
     .replace(/^-+|-+$/g, "");
   return slug || "index";
