@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.1...scaffold-astro-site-v1.2.2) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** publish Lighthouse reports under stable file names ([#44](https://github.com/alrayyes/scaffold-astro-site/issues/44)) ([0027a39](https://github.com/alrayyes/scaffold-astro-site/commit/0027a39cd84f869c05f14aeff7a8a6147b2b23aa)), closes [#43](https://github.com/alrayyes/scaffold-astro-site/issues/43)
+
 ## [1.2.1](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.0...scaffold-astro-site-v1.2.1) (2026-10-15)
 
 
