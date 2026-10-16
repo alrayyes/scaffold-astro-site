@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.5](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.4...scaffold-astro-site-v1.2.5) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** cut very long Lighthouse report names and end them in a hash ([#52](https://github.com/alrayyes/scaffold-astro-site/issues/52)) ([bd1d403](https://github.com/alrayyes/scaffold-astro-site/commit/bd1d4035c0db43f8bd8fa38f60f46ba0e7fde747))
+
 ## [1.2.4](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.3...scaffold-astro-site-v1.2.4) (2026-10-16)
 
 
