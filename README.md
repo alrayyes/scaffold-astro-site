@@ -99,7 +99,10 @@ under `alrayyes` they're at `https://apis.ryankes.eu/my-site/reports/`:
 - `tests/`: the unit (`unit.xml`) and end-to-end (`e2e.xml`) results as JUnit
   XML.
 - `coverage/`: an HTML view, `coverage.xml` (Cobertura) and `lcov.info`.
-- `lighthouse/`: the HTML and JSON report for each audited page.
+- `lighthouse/`: `<page>.report.html` and `<page>.report.json` for each audited
+  page, plus `manifest.json`. The names carry no timestamp, so a link or a
+  cached manifest stays valid across deploys. Extra runs of a page are
+  `<page>-2.report.html` and so on.
 
 Every pull request assembles them, so a broken step fails before the merge,
 but only a push to the default branch deploys. After the deploy, a step
