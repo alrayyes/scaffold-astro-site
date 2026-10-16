@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.3...scaffold-astro-site-v1.2.4) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** keep Lighthouse report names ASCII so index links open the file ([#50](https://github.com/alrayyes/scaffold-astro-site/issues/50)) ([80adda5](https://github.com/alrayyes/scaffold-astro-site/commit/80adda53db7520837582da6c44090483f0d60eec))
+
 ## [1.2.3](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.2...scaffold-astro-site-v1.2.3) (2026-10-16)
 
 
