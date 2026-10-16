@@ -6,6 +6,8 @@
 // It refuses to run when a required file is missing: a half-populated reports
 // directory would deploy, replace the last good one, and 404 the links that
 // point at it.
+
+import { createHash } from "node:crypto";
 import { access, cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 
@@ -65,12 +67,18 @@ interface ManifestEntry {
   [key: string]: unknown;
 }
 
+// Linux caps a file name at 255 bytes. The slug is ASCII by then, so its length
+// is its byte length, and 160 leaves room for `-<n>.report.html` with margin.
+const MAX_SLUG = 160;
+
 // `/` becomes `index`, `/blog/post.html` becomes `blog-post`. The result is
 // plain ASCII: percent-encoding would be decoded by the browser following the
 // index link, and miss the file. A non-ASCII character becomes `_` and its
 // code point in hex (`/café` is `caf_e9`) rather than being dropped, so pages
 // that differ only there keep different names and none falls back to `index`.
-// A malformed %-sequence is kept as typed instead of failing the assembly.
+// A malformed %-sequence is kept as typed instead of failing the assembly. A
+// slug past the file-name limit is cut and ends in a hash of the full path, so
+// two long paths with the same start stay apart.
 export function pageSlug(url: string): string {
   const { pathname } = new URL(url);
   let path = pathname;
@@ -82,6 +90,10 @@ export function pageSlug(url: string): string {
     .replace(/\P{ASCII}/gu, (char) => `_${char.codePointAt(0)?.toString(16)}`)
     .replace(/[^A-Za-z0-9._]+/g, "-")
     .replace(/^-+|-+$/g, "");
+  if (slug.length > MAX_SLUG) {
+    const hash = createHash("sha256").update(pathname).digest("hex").slice(0, 8);
+    return `${slug.slice(0, MAX_SLUG - 9).replace(/-+$/, "")}-${hash}`;
+  }
   return slug || "index";
 }
 

@@ -188,6 +188,29 @@ describe("pageSlug", () => {
   });
 });
 
+describe("pageSlug length", () => {
+  const long = (tail: string) => `http://localhost/${"a".repeat(300)}${tail}`;
+
+  test("leaves a short path's name unchanged", () => {
+    expect(pageSlug("http://localhost/blog/post.html")).toBe("blog-post");
+  });
+
+  test("shortens a long path to a name that fits a file system, ending in a hash", () => {
+    const slug = pageSlug(long(""));
+    expect(Buffer.byteLength(`${slug}-2.report.html`)).toBeLessThanOrEqual(200);
+    expect(slug).toMatch(/^a+-[0-9a-f]{8}$/);
+  });
+
+  test("keeps two long paths that share their first 200 bytes apart", () => {
+    expect(pageSlug(long("x"))).not.toBe(pageSlug(long("y")));
+  });
+
+  test("counts bytes, so a long non-Latin path fits too", () => {
+    const slug = pageSlug(`http://localhost/${encodeURIComponent("日本語".repeat(40))}`);
+    expect(Buffer.byteLength(`${slug}-2.report.html`)).toBeLessThanOrEqual(200);
+  });
+});
+
 describe("stabiliseLighthouse", () => {
   const stamps = ["2026_10_16_16_21_30", "2026_10_16_16_21_40", "2026_10_16_16_21_50"];
 
