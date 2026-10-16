@@ -102,7 +102,8 @@ under `alrayyes` they're at `https://apis.ryankes.eu/my-site/reports/`:
 - `lighthouse/`: `<page>.report.html` and `<page>.report.json` for each audited
   page, plus `manifest.json`. `<page>` is the page's path with anything but
   letters, digits, `.` and `_` turned into `-`, and a non-ASCII character
-  written as `_` and its hex code (`/café` is `caf_e9`). The names carry no
+  written as `_` and its hex code (`/café` is `caf_e9`). A name that would be
+  too long for a file system is cut and ends in a hash. The names carry no
   timestamp, so a link or a cached manifest stays valid across deploys. Extra
   runs of a page are `<page>-2.report.html` and so on. Two pages that flatten
   to the same name (`/a/b` and `/a-b`) fail the assembly rather than overwrite
