@@ -102,7 +102,8 @@ under `alrayyes` they're at `https://apis.ryankes.eu/my-site/reports/`:
 - `lighthouse/`: `<page>.report.html` and `<page>.report.json` for each audited
   page, plus `manifest.json`. The names carry no timestamp, so a link or a
   cached manifest stays valid across deploys. Extra runs of a page are
-  `<page>-2.report.html` and so on.
+  `<page>-2.report.html` and so on. Two pages that flatten to the same name
+  (`/a/b` and `/a-b`) fail the assembly rather than overwrite each other.
 
 Every pull request assembles them, so a broken step fails before the merge,
 but only a push to the default branch deploys. After the deploy, a step

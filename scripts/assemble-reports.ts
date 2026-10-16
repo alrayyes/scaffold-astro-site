@@ -81,18 +81,39 @@ export function pageSlug(url: string): string {
 // The manifest is rewritten to the new bare file names.
 export async function stabiliseLighthouse({ from, to }: { from: string; to: string }) {
   const manifest: ManifestEntry[] = JSON.parse(await readFile(join(from, "manifest.json"), "utf8"));
+  // Representative run first, then the rest oldest first, so a run's number
+  // doesn't depend on the order the manifest lists them in.
   const ordered = [...manifest].sort(
-    (a, b) => Number(!!b.isRepresentativeRun) - Number(!!a.isRepresentativeRun),
+    (a, b) =>
+      Number(!!b.isRepresentativeRun) - Number(!!a.isRepresentativeRun) ||
+      basename(a.htmlPath).localeCompare(basename(b.htmlPath)),
   );
   const seen = new Map<string, number>();
+  const owner = new Map<string, string>();
   const renamed = new Map<ManifestEntry, ManifestEntry>();
 
   await mkdir(to, { recursive: true });
   for (const entry of ordered) {
     const slug = pageSlug(entry.url);
+    const first = owner.get(slug);
+    if (first !== undefined && first !== entry.url) {
+      throw new Error(
+        `lighthouse report name clash: ${first} and ${entry.url} both map to ${slug}`,
+      );
+    }
     const n = (seen.get(slug) ?? 0) + 1;
     seen.set(slug, n);
     const stem = n === 1 ? slug : `${slug}-${n}`;
+    // Two pages that flatten to one name, or a page named like another's
+    // numbered run (`/foo-2` and the second run of `/foo`), would overwrite
+    // or impersonate each other.
+    const holder = owner.get(stem);
+    if (holder !== undefined && holder !== entry.url) {
+      throw new Error(
+        `lighthouse report name clash: ${holder} and ${entry.url} both map to ${stem}`,
+      );
+    }
+    owner.set(stem, entry.url);
     const htmlPath = `${stem}.report.html`;
     const jsonPath = `${stem}.report.json`;
     await cp(join(from, basename(entry.htmlPath)), join(to, htmlPath));

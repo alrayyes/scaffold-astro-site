@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { assembleReports, renderIndex } from "./assemble-reports";
+import { assembleReports, pageSlug, renderIndex, stabiliseLighthouse } from "./assemble-reports";
 
 let root: string;
 let out: string;
@@ -166,6 +166,100 @@ describe("assembleReports", () => {
     await seed();
     await rm(join(root, "lighthouse-report"), { recursive: true });
     await expect(assembleReports({ root, out })).rejects.toThrow("lighthouse-report");
+  });
+});
+
+describe("pageSlug", () => {
+  test.each([
+    ["http://localhost/", "index"],
+    ["http://localhost/index.html", "index"],
+    ["http://localhost/404.html", "404"],
+    ["http://localhost/blog/post.html", "blog-post"],
+    ["http://localhost/about.htm", "about"],
+    ["http://localhost/blog/", "blog"],
+    ["http://localhost/caf%C3%A9.html", "caf%C3%A9"],
+  ])("%s becomes %s", (url, slug) => {
+    expect(pageSlug(url)).toBe(slug);
+  });
+});
+
+describe("stabiliseLighthouse", () => {
+  const stamps = ["2026_10_16_16_21_30", "2026_10_16_16_21_40", "2026_10_16_16_21_50"];
+
+  async function seedRuns(manifest: ReturnType<typeof run>[]) {
+    await put(`${LH}manifest.json`, JSON.stringify(manifest));
+    for (const entry of manifest) {
+      await put(`${LH}${entry.htmlPath.split("/").pop()}`);
+      await put(`${LH}${entry.jsonPath.split("/").pop()}`);
+    }
+  }
+  const runs = () =>
+    stamps.map((stamp, i) => run("http://localhost/", stamp, i === 1, "localhost-index"));
+
+  test("numbers a third run of a page -3", async () => {
+    await seedRuns(runs());
+    const result = await stabiliseLighthouse({
+      from: join(root, "lighthouse-report"),
+      to: join(out, "lighthouse"),
+    });
+    expect(result.map((e) => e.htmlPath).sort()).toEqual([
+      "index-2.report.html",
+      "index-3.report.html",
+      "index.report.html",
+    ]);
+  });
+
+  test("gives each non-representative run the same name whatever order the manifest lists them in", async () => {
+    const forward = runs();
+    await seedRuns(forward);
+    const a = await stabiliseLighthouse({
+      from: join(root, "lighthouse-report"),
+      to: join(out, "a"),
+    });
+    const b = await stabiliseLighthouse({
+      from: join(root, "lighthouse-report"),
+      to: join(out, "b"),
+    });
+    expect(b).toEqual(a);
+    await put(`${LH}manifest.json`, JSON.stringify([...forward].reverse()));
+    const reversed = await stabiliseLighthouse({
+      from: join(root, "lighthouse-report"),
+      to: join(out, "c"),
+    });
+    const byName = (list: typeof a) =>
+      Object.fromEntries(list.map((e) => [e.htmlPath, e.jsonPath]));
+    expect(byName(reversed)).toEqual(byName(a));
+    for (const name of ["index", "index-2", "index-3"]) {
+      for (const ext of ["html", "json"]) {
+        const file = `${name}.report.${ext}`;
+        expect(await readFile(join(out, "c", file), "utf8")).toBe(
+          await readFile(join(out, "a", file), "utf8"),
+        );
+      }
+    }
+  });
+
+  test.each([
+    ["page first", ["http://localhost/foo", "http://localhost/foo-2"]],
+    ["numbered name first", ["http://localhost/foo-2", "http://localhost/foo"]],
+  ])("refuses a page named like another's numbered run (%s)", async (_label, urls) => {
+    const runsOf = (url: string, slug: string) =>
+      stamps.slice(0, 2).map((stamp, i) => run(url, stamp, i === 0, slug));
+    const [first, second] = urls;
+    await seedRuns([...runsOf(first, "localhost-first"), ...runsOf(second, "localhost-second")]);
+    await expect(
+      stabiliseLighthouse({ from: join(root, "lighthouse-report"), to: join(out, "lighthouse") }),
+    ).rejects.toThrow("name clash");
+  });
+
+  test("refuses two different URLs that flatten to the same name, naming both", async () => {
+    await seedRuns([
+      run("http://localhost/a/b", stamps[0], true, "localhost-a-b"),
+      run("http://localhost/a-b", stamps[1], true, "localhost-a-b-x"),
+    ]);
+    await expect(
+      stabiliseLighthouse({ from: join(root, "lighthouse-report"), to: join(out, "lighthouse") }),
+    ).rejects.toThrow(/http:\/\/localhost\/a\/b.*http:\/\/localhost\/a-b/);
   });
 });
 
