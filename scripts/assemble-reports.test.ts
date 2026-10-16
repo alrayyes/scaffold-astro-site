@@ -177,7 +177,8 @@ describe("pageSlug", () => {
     ["http://localhost/blog/post.html", "blog-post"],
     ["http://localhost/about.htm", "about"],
     ["http://localhost/blog/", "blog"],
-    ["http://localhost/caf%C3%A9.html", "caf%C3%A9"],
+    ["http://localhost/caf%C3%A9.html", "caf"],
+    ["http://localhost/a%20b.html", "a-b"],
   ])("%s becomes %s", (url, slug) => {
     expect(pageSlug(url)).toBe(slug);
   });
@@ -247,6 +248,28 @@ describe("stabiliseLighthouse", () => {
       stamps.slice(0, 2).map((stamp, i) => run(url, stamp, i === 0, slug));
     const [first, second] = urls;
     await seedRuns([...runsOf(first, "localhost-first"), ...runsOf(second, "localhost-second")]);
+    await expect(
+      stabiliseLighthouse({ from: join(root, "lighthouse-report"), to: join(out, "lighthouse") }),
+    ).rejects.toThrow("name clash");
+  });
+
+  test("names a page with a percent-encoded path with no % in it, so the index link opens the file", async () => {
+    await seed();
+    await seedRuns([run("http://localhost/caf%C3%A9.html", stamps[0], true, "localhost-cafe")]);
+    await assembleReports({ root, out });
+    const names = await readdir(join(out, "lighthouse"));
+    expect(names.some((n) => n.includes("%"))).toBe(false);
+    const index = await read("lighthouse/index.html");
+    for (const n of names.filter((n) => n.endsWith(".report.html"))) {
+      expect(index).toContain(`href="${n}"`);
+    }
+  });
+
+  test("still refuses two URLs that differ only by encoding", async () => {
+    await seedRuns([
+      run("http://localhost/a%20b.html", stamps[0], true, "localhost-one"),
+      run("http://localhost/a-b.html", stamps[1], true, "localhost-two"),
+    ]);
     await expect(
       stabiliseLighthouse({ from: join(root, "lighthouse-report"), to: join(out, "lighthouse") }),
     ).rejects.toThrow("name clash");

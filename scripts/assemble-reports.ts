@@ -65,12 +65,14 @@ interface ManifestEntry {
   [key: string]: unknown;
 }
 
-// `/` becomes `index`, `/blog/post.html` becomes `blog-post`.
+// `/` becomes `index`, `/blog/post.html` becomes `blog-post`. The result is
+// plain ASCII: percent-encoding would be decoded by the browser following the
+// index link, and miss the file.
 export function pageSlug(url: string): string {
-  const slug = new URL(url).pathname
+  const slug = decodeURIComponent(new URL(url).pathname)
     .replace(/\.html?$/, "")
-    .replace(/^\/+|\/+$/g, "")
-    .replaceAll("/", "-");
+    .replace(/[^A-Za-z0-9._]+/g, "-")
+    .replace(/^-+|-+$/g, "");
   return slug || "index";
 }
 
