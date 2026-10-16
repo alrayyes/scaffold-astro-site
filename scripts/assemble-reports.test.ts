@@ -205,6 +205,26 @@ describe("pageSlug length", () => {
     expect(pageSlug(long("x"))).not.toBe(pageSlug(long("y")));
   });
 
+  test("leaves a 160-character slug alone and cuts a 161-character one", () => {
+    expect(pageSlug(`http://localhost/${"a".repeat(160)}`)).toBe("a".repeat(160));
+    expect(pageSlug(`http://localhost/${"a".repeat(161)}`)).toMatch(/^a+-[0-9a-f]{8}$/);
+  });
+
+  test("gives the same hash every time", () => {
+    expect(pageSlug(long("x"))).toBe(pageSlug(long("x")));
+  });
+
+  test("drops a dash the cut lands on, so the hash never follows two", () => {
+    const slug = pageSlug(`http://localhost/${"a".repeat(150)}/${"b".repeat(30)}`);
+    expect(slug).not.toContain("--");
+    expect(slug).toMatch(/-[0-9a-f]{8}$/);
+  });
+
+  test("ends a long non-Latin name in a hash", () => {
+    const slug = pageSlug(`http://localhost/${encodeURIComponent("日本語".repeat(40))}`);
+    expect(slug).toMatch(/-[0-9a-f]{8}$/);
+  });
+
   test("counts bytes, so a long non-Latin path fits too", () => {
     const slug = pageSlug(`http://localhost/${encodeURIComponent("日本語".repeat(40))}`);
     expect(Buffer.byteLength(`${slug}-2.report.html`)).toBeLessThanOrEqual(200);
