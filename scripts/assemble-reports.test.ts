@@ -229,9 +229,27 @@ describe("stabiliseLighthouse", () => {
     const byName = (list: typeof a) =>
       Object.fromEntries(list.map((e) => [e.htmlPath, e.jsonPath]));
     expect(byName(reversed)).toEqual(byName(a));
-    expect(await readFile(join(out, "c/index-2.report.html"), "utf8")).toBe(
-      await readFile(join(out, "a/index-2.report.html"), "utf8"),
-    );
+    for (const name of ["index", "index-2", "index-3"]) {
+      for (const ext of ["html", "json"]) {
+        const file = `${name}.report.${ext}`;
+        expect(await readFile(join(out, "c", file), "utf8")).toBe(
+          await readFile(join(out, "a", file), "utf8"),
+        );
+      }
+    }
+  });
+
+  test.each([
+    ["page first", ["http://localhost/foo", "http://localhost/foo-2"]],
+    ["numbered name first", ["http://localhost/foo-2", "http://localhost/foo"]],
+  ])("refuses a page named like another's numbered run (%s)", async (_label, urls) => {
+    const runsOf = (url: string, slug: string) =>
+      stamps.slice(0, 2).map((stamp, i) => run(url, stamp, i === 0, slug));
+    const [first, second] = urls;
+    await seedRuns([...runsOf(first, "localhost-first"), ...runsOf(second, "localhost-second")]);
+    await expect(
+      stabiliseLighthouse({ from: join(root, "lighthouse-report"), to: join(out, "lighthouse") }),
+    ).rejects.toThrow("name clash");
   });
 
   test("refuses two different URLs that flatten to the same name, naming both", async () => {
