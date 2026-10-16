@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.2...scaffold-astro-site-v1.2.3) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ci:** fail on Lighthouse report name clashes and number extra runs deterministically ([#47](https://github.com/alrayyes/scaffold-astro-site/issues/47)) ([c67517c](https://github.com/alrayyes/scaffold-astro-site/commit/c67517c101a5028a3ad7d233071c620327fcdbff))
+
 ## [1.2.2](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.1...scaffold-astro-site-v1.2.2) (2026-10-16)
 
 
