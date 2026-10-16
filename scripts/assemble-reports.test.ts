@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { assembleReports, renderIndex } from "./assemble-reports";
@@ -20,12 +20,34 @@ const FILES = [
   "coverage/html/index.html",
   "coverage/html/src/index.html",
   "playwright-report/junit.xml",
-  "lighthouse-report/lhr-1.html",
-  "lighthouse-report/lhr-1.json",
+  "lighthouse-report/manifest.json",
+  "lighthouse-report/localhost-index_html-2026_10_16_16_21_30.report.html",
+  "lighthouse-report/localhost-index_html-2026_10_16_16_21_30.report.json",
+  "lighthouse-report/localhost-index_html-2026_10_16_16_21_45.report.html",
+  "lighthouse-report/localhost-index_html-2026_10_16_16_21_45.report.json",
+  "lighthouse-report/localhost-404_html-2026_10_16_16_21_31.report.html",
+  "lighthouse-report/localhost-404_html-2026_10_16_16_21_31.report.json",
+];
+
+const LH = "lighthouse-report/";
+const run = (url: string, stamp: string, representative: boolean, slug: string) => ({
+  url,
+  isRepresentativeRun: representative,
+  htmlPath: `/home/runner/work/site/site/${LH}${slug}-${stamp}.report.html`,
+  jsonPath: `/home/runner/work/site/site/${LH}${slug}-${stamp}.report.json`,
+  summary: { performance: 1 },
+});
+const MANIFEST = [
+  run("http://localhost/index.html", "2026_10_16_16_21_30", false, "localhost-index_html"),
+  run("http://localhost/index.html", "2026_10_16_16_21_45", true, "localhost-index_html"),
+  run("http://localhost/404.html", "2026_10_16_16_21_31", true, "localhost-404_html"),
 ];
 
 async function seed({ without }: { without?: string } = {}) {
-  for (const file of FILES) if (file !== without) await put(file);
+  for (const file of FILES) {
+    if (file === without) continue;
+    await put(file, file.endsWith("manifest.json") ? JSON.stringify(MANIFEST) : file);
+  }
 }
 
 const read = (path: string) => readFile(join(out, path), "utf8");
@@ -57,11 +79,64 @@ describe("assembleReports", () => {
     expect(await read("coverage/src/index.html")).toBe("coverage/html/src/index.html");
   });
 
-  test("copies the Lighthouse CI output, keeping its HTML and JSON pairs", async () => {
+  test("publishes each audited page's representative run under a name with no timestamp", async () => {
     await seed();
     await assembleReports({ root, out });
-    expect(await read("lighthouse/lhr-1.html")).toBe("lighthouse-report/lhr-1.html");
-    expect(await read("lighthouse/lhr-1.json")).toBe("lighthouse-report/lhr-1.json");
+    expect(await read("lighthouse/index.report.html")).toBe(
+      `${LH}localhost-index_html-2026_10_16_16_21_45.report.html`,
+    );
+    expect(await read("lighthouse/index.report.json")).toBe(
+      `${LH}localhost-index_html-2026_10_16_16_21_45.report.json`,
+    );
+    expect(await read("lighthouse/404.report.html")).toBe(
+      `${LH}localhost-404_html-2026_10_16_16_21_31.report.html`,
+    );
+  });
+
+  test("keeps the other runs of a page as <page>-2, so none is lost", async () => {
+    await seed();
+    await assembleReports({ root, out });
+    expect(await read("lighthouse/index-2.report.html")).toBe(
+      `${LH}localhost-index_html-2026_10_16_16_21_30.report.html`,
+    );
+    expect(await read("lighthouse/index-2.report.json")).toBe(
+      `${LH}localhost-index_html-2026_10_16_16_21_30.report.json`,
+    );
+  });
+
+  test("leaves no timestamped file in the published directory", async () => {
+    await seed();
+    await assembleReports({ root, out });
+    expect((await readdir(join(out, "lighthouse"))).filter((n) => /\d{4}_\d\d_/.test(n))).toEqual(
+      [],
+    );
+  });
+
+  test("rewrites the manifest so every path is a file name that exists", async () => {
+    await seed();
+    await assembleReports({ root, out });
+    const manifest = JSON.parse(await read("lighthouse/manifest.json"));
+    expect(manifest).toHaveLength(3);
+    const names = new Set(await readdir(join(out, "lighthouse")));
+    for (const entry of manifest) {
+      expect(entry.htmlPath).toMatch(/^[^/]+\.report\.html$/);
+      expect(entry.jsonPath).toMatch(/^[^/]+\.report\.json$/);
+      expect(names.has(entry.htmlPath)).toBe(true);
+      expect(names.has(entry.jsonPath)).toBe(true);
+    }
+    expect(manifest.find((e: { htmlPath: string }) => e.htmlPath === "index.report.html").url).toBe(
+      "http://localhost/index.html",
+    );
+    expect(manifest[0].summary).toEqual({ performance: 1 });
+  });
+
+  test("is stable: a second assembly names every file the same", async () => {
+    await seed();
+    await assembleReports({ root, out });
+    const first = (await readdir(join(out, "lighthouse"))).sort();
+    await rm(out, { recursive: true });
+    await assembleReports({ root, out });
+    expect((await readdir(join(out, "lighthouse"))).sort()).toEqual(first);
   });
 
   test("writes an index at the top, in tests/ and in lighthouse/, since Pages has no directory listing", async () => {
@@ -74,7 +149,9 @@ describe("assembleReports", () => {
     const tests = await read("tests/index.html");
     expect(tests).toContain('href="unit.xml"');
     expect(tests).toContain('href="e2e.xml"');
-    expect(await read("lighthouse/index.html")).toContain('href="lhr-1.html"');
+    const lighthouse = await read("lighthouse/index.html");
+    expect(lighthouse).toContain('href="index.report.html"');
+    expect(lighthouse).toContain('href="404.report.html"');
   });
 
   test.each(FILES.filter((file) => !file.includes("src/") && !file.startsWith("lighthouse")))(
