@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.6](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.5...scaffold-astro-site-v1.2.6) (2026-10-19)
+
+
+### Bug Fixes
+
+* **deps:** drop the redundant playwright-core override ([76e8527](https://github.com/alrayyes/scaffold-astro-site/commit/76e8527151260cd5e971f298361fefcd887cb079))
+* **deps:** drop the redundant playwright-core override ([ddfb395](https://github.com/alrayyes/scaffold-astro-site/commit/ddfb3953d16b0d22fb1a4d294fa00c9ab9b1d686))
+
 ## [1.2.5](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.4...scaffold-astro-site-v1.2.5) (2026-10-16)
 
 
