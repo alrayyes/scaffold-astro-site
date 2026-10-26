@@ -13,6 +13,10 @@ pre-commit:
       run: bunx biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
 
+    # Scans the index, so a key never reaches a commit. Needs gitleaks on PATH.
+    - name: gitleaks
+      run: gitleaks git --staged --redact --no-banner
+
     # Prettier decides the layout, markdownlint then judges what Prettier
     # produced. The other order has markdownlint fixing something Prettier is
     # about to overwrite.
@@ -62,6 +66,11 @@ pre-push:
   jobs:
     - name: test
       run: bun run test:unit
+
+    # Whole history: small repo, so it costs seconds, and it is what CI runs
+    # (rules/secrets.md).
+    - name: gitleaks
+      run: gitleaks git --redact --no-banner
 
     - name: check
       run: bun run check
