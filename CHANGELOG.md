@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.8](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.7...scaffold-astro-site-v1.2.8) (2026-10-26)
+
+
+### Bug Fixes
+
+* **deps:** bump the bun-dependencies group with 8 updates ([#65](https://github.com/alrayyes/scaffold-astro-site/issues/65)) ([6aeb557](https://github.com/alrayyes/scaffold-astro-site/commit/6aeb5574eaeadceb6d26e03fa02fa19d7ec61f91))
+
 ## [1.2.7](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.6...scaffold-astro-site-v1.2.7) (2026-10-19)
 
 
