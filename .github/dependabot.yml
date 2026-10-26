@@ -74,3 +74,17 @@ updates:
       actions-major:
         patterns: ["*"]
         update-types: [major]
+
+  # The stub Dockerfile that pins gitleaks for .github/workflows/gitleaks.yml.
+  # Dependabot doesn't read a workflow's `container:`, so the pin lives here.
+  # ci: because it changes the pipeline, not what ships.
+  - package-ecosystem: docker
+    directory: /.github/gitleaks
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    commit-message:
+      prefix: ci
+      include: scope
