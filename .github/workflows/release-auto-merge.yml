@@ -25,9 +25,12 @@ permissions:
   contents: write
   pull-requests: write
 
+# Never cancel: the opened run skips and the labeled run, a second later,
+# is the one that arms auto-merge. cancel-in-progress let the first
+# supersede the second. Queued runs are cheap and arming is idempotent.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   auto-merge:
