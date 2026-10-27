@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.9](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.8...scaffold-astro-site-v1.2.9) (2026-10-27)
+
+
+### Bug Fixes
+
+* **ci:** stop release-auto-merge cancelling its own labeled run ([#73](https://github.com/alrayyes/scaffold-astro-site/issues/73)) ([20440b9](https://github.com/alrayyes/scaffold-astro-site/commit/20440b9134c3e3e8835d25591fecb194364373d7))
+* **deps:** bump the bun-dependencies group with 3 updates ([#72](https://github.com/alrayyes/scaffold-astro-site/issues/72)) ([d6db7a8](https://github.com/alrayyes/scaffold-astro-site/commit/d6db7a87eb5f763fa5edadd2ceffae7ca8eaf698))
+
 ## [1.2.8](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.7...scaffold-astro-site-v1.2.8) (2026-10-26)
 
 
