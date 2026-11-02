@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.10](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.9...scaffold-astro-site-v1.2.10) (2026-11-02)
+
+
+### Bug Fixes
+
+* unblock the bun-dependencies group (Biome Markdown, re2js advisory) ([#76](https://github.com/alrayyes/scaffold-astro-site/issues/76)) ([2fc435c](https://github.com/alrayyes/scaffold-astro-site/commit/2fc435c59a1cf6cccc0cba69292009f6dd94ef1e))
+
 ## [1.2.9](https://github.com/alrayyes/scaffold-astro-site/compare/scaffold-astro-site-v1.2.8...scaffold-astro-site-v1.2.9) (2026-10-27)
 
 
