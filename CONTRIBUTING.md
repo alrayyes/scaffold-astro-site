@@ -16,7 +16,9 @@ for whoever stamps a site out of it.
   ```
 
   `ltex-cli-plus` needs nothing installed: the hook fetches and caches it
-  on first use.
+  on first use. The pre-push hook checks only the Markdown in your push, and
+  all of it when `.ltex.json` or `scripts/lint-mechanics.sh` changed, so a push
+  with no prose never starts the JVM. CI checks everything.
 
 - **[gitleaks](https://github.com/gitleaks/gitleaks)** on your `PATH`, for
   the secret scan the pre-commit and pre-push hooks run.
@@ -60,7 +62,7 @@ bun run format                # biome check --write ., the fixer
 bun run format:check         # prettier --check (md/yml/astro), add --write to fix
 bun run lint:md
 bun run lint:prose           # vale
-bun run lint:mechanics       # ltex-cli-plus
+bun run lint:mechanics       # ltex-cli-plus, every document
 ```
 
 ## How it fits together
