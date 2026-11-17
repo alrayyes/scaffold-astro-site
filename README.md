@@ -125,23 +125,24 @@ a change gets reviewed and released.
 
 ## Actions event policy
 
-The workflows here use `pull_request_target`, which GitHub's default Actions
-policy blocks on public repos from 2026-12-02. A new public repo made from this
-template needs a per-repo policy allowing the events its workflows use, or
-those workflows end in `startup_failure`:
+The workflows here use `pull_request_target`. GitHub's default Actions policy
+blocks that event on public repositories, and enforcement starts on 2026-12-02
+for repositories relying on the default. A public repository made from this
+template needs its own policy allowing the events its workflows use, or those
+workflows end in `startup_failure`:
 
 ```sh
 gh api -X POST repos/<owner>/<repo>/actions/policies --input - <<'JSON'
 {"name":"allow-pull_request_target","enforcement":"active",
  "rules":[{"type":"restrict_action_events",
-           "parameters":{"allowed_events":["pull_request_target","pull_request","push"]}}]}
+           "parameters":{"allowed_events":["pull_request_target","pull_request","push","schedule","workflow_dispatch"]}}]}
 JSON
 ```
 
-`allowed_events` is an allow-list: add every other event a workflow uses
-(`schedule`, `workflow_dispatch`, `workflow_run`, `release` and so on), or it
-stops firing. A later change to an existing policy is made in the UI under
-Settings > Actions > Policies. See the
+`allowed_events` is an allow-list, so any event left out stops firing. Trim or
+extend the example to match the `on:` of the repository's own workflows. Changing
+an existing policy through the API (`PUT`) returned 404 for the owner's token, so
+edit it in the UI under Settings > Actions > Policies. See the
 [GitHub docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target).
 
 ## Licence
