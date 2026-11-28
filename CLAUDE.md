@@ -56,6 +56,19 @@ bun run format:check         # bun run lint:md, lint:prose, lint:mechanics too
 
 Full list and what each one does: [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Test tiers
+
+Take the lowest tier that can prove the behaviour
+(`~/.config/claude/rules/testing.md`):
+
+1. `bun run check`: types and template errors.
+2. `bun run test:unit`: logic in plain modules, as `src/lib/greeting.test.ts`
+   does.
+3. `bun run test:e2e` (`e2e/`), against the built site: only what needs a
+   browser or the server, such as headers, the 404 page and one journey. Each
+   new browser test says in its pull request why no lower tier can catch the
+   fault.
+
 ## Gotchas
 
 - **`bun` is pinned below 1.4** (`packageManager: "bun@1.3.14"`), and the
