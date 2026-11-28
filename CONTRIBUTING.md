@@ -69,8 +69,8 @@ bun run lint:mechanics       # ltex-cli-plus, every document
 
 One page, `src/pages/index.astro`, laid out through `src/layouts/Layout.astro`
 — `Astro`'s file-based routing, no framework beyond `Astro` itself.
-`src/lib/greeting.ts` is the one bit of real logic (`index.test.ts`'s
-sibling, `greeting.test.ts`, uses `bun:test`), purely so the page has
+`src/lib/greeting.ts` is the one bit of real logic, tested by
+`greeting.test.ts` beside it with `bun:test`. It's there purely so the page has
 something real to render, test, and run an accessibility scan against. A
 real site stamped from this template replaces the page and deletes the
 greeting helper.
